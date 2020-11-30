@@ -3,14 +3,18 @@ import React, { useState } from "react";
 import { render } from "react-dom";
 import { Alert, Button, StyleSheet, Text, View, Switch } from "react-native";
 import { FlatList, ScrollView, TextInput } from "react-native-gesture-handler";
+import { isEnabled } from "react-native/Libraries/Performance/Systrace";
 
 export default function Home() {
-  const [unit, setUnit] = useState(0);
+  const [unit, setUnit] = useState("Meter");
   const [roomSize, setRoomSize] = useState(0);
   const [materialPrice, setMaterialPrice] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const toggleSwitch = () => {
+    setIsEnabled((previousState) => !previousState);
+    setUnit(isEnabled ? "Meter" : "Feet");
+  };
 
   return (
     <ScrollView>
@@ -39,7 +43,6 @@ export default function Home() {
           style={styles.ipnut}
           onChangeText={(txt) => setRoomSize(txt)}
         />
-
         <Text>Flooring Price Per Unit :</Text>
         <TextInput
           keyboardType="numeric"
@@ -52,17 +55,16 @@ export default function Home() {
           style={styles.ipnut}
           onChangeText={(txt) => setLaborCost(txt)}
         />
-
         <Button
           title="Calculate"
-          onPress={() => calculate(roomSize, materialPrice, laborCost)}
+          onPress={() => calculate(roomSize, materialPrice, laborCost, unit)}
         />
       </View>
     </ScrollView>
   );
 }
 
-const calculate = (size, mPrice, inPrice) => {
+const calculate = (size, mPrice, inPrice, unit) => {
   let insPrice = inPrice * size;
   let floorPr = mPrice * size;
   let sub = insPrice + floorPr;
@@ -78,8 +80,9 @@ const calculate = (size, mPrice, inPrice) => {
     str += "Installation Price has not been declared";
     count++;
   }
+
   if (count == 0) {
-    let msg = `Installation Price : $${insPrice}\nFlooring Price : $${floorPr}\nSubtotal : $${sub}\nTax : $${
+    let msg = `Selected Unit : ${unit}\nInstallation Price : $${insPrice}\nFlooring Price : $${floorPr}\nSubtotal : $${sub}\nTax : $${
       sub * 0.13
     }\ntotal : $${(sub * 1.13).toFixed(2)}`;
     alert(msg);

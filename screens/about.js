@@ -1,14 +1,16 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-// import { NavigationContainer } from "@react-navigation/native";
-// import { CreateStackNavigator } from "@react-navigation/stack";
-
 import { StyleSheet, Text, View } from "react-native";
 
-import Home from "./screens/home";
-
-export default function App() {
-  return <Home />;
+export default function About() {
+  return (
+    <View style={styles.container}>
+      <Text>Hey This is Milan Patel</Text>
+      <Text>Student Id : 101153456</Text>
+      <Text>George Brown College</Text>
+      <Text>Thanks for visiting me</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
